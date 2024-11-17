@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '@/app/redux'
-import { setIsSidebarCollapsed } from '@/state'
-import { Menu, Search, Settings } from 'lucide-react'
+import { setIsDarkMode, setIsSidebarCollapsed } from '@/state'
+import { Menu, Moon, Search, Settings, Sun } from 'lucide-react'
 import Link from 'next/link'
 const Navbar = () => {
   const dispatch = useAppDispatch()
@@ -23,7 +23,16 @@ const Navbar = () => {
       </div>
 
       {/* Icons */}
-      <div className='flex items-center'>
+      <div className='flex items-center gap-4'>
+        {isDarkMode ? (
+          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))}>
+            <Sun className='w-6 h-6 cursor-pointer dark:text-gray-100 text-gray-700'/>
+          </button>
+        ) : (
+          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))}>
+            <Moon className='w-6 h-6 cursor-pointer dark:text-gray-100 text-gray-700'/>
+          </button>
+        )}
         <Link href='/settings'>
           <Settings className='h-6 w-6 cursor-pointer dark:text-white'/>
         </Link>
