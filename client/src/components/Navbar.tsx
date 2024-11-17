@@ -12,7 +12,7 @@ const Navbar = () => {
       {/* Search Bar */}
       <div className='flex items-center gap-8'>
         {!isSidebarCollapsed ? null : (
-          <button onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))}>
+          <button onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))} className='rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-100'>
           <Menu className='h-8 w-8 dark:text-white' /> 
         </button>
         )}

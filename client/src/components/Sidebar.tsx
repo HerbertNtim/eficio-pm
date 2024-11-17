@@ -1,6 +1,8 @@
 "use client";
 
-import { LockIcon, LucideIcon } from "lucide-react";
+import { useAppDispatch, useAppSelector } from "@/app/redux";
+import { setIsSidebarCollapsed } from "@/state";
+import { Home, LockIcon, LucideIcon, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -10,8 +12,10 @@ const Sidebar = () => {
   const [showProjects, setShowProjects] = useState(false);
   const [showPriorites, setShowPriorities] = useState(false);
 
-  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl
-    transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white`;
+  const dispatch = useAppDispatch();
+  const isSidebarCollapsed = useAppSelector((state) => state.global.isSidebarCollapsed)
+
+  const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}`;
 
   return (
     <div className={sidebarClassNames}>
@@ -21,6 +25,14 @@ const Sidebar = () => {
           <div className="text-xl font-bold text-gray-800 dark:text-white">
             EFLIST
           </div>
+          {isSidebarCollapsed ? null : (
+            <button
+              onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))}
+              className="rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-100"
+            >
+              <X className="h-8 w-8 dark:text-white" />
+            </button>
+          )}
         </div>
         {/* TEAM */}
         <div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700">
@@ -40,6 +52,10 @@ const Sidebar = () => {
             </div>
           </div>
         </div>
+        {/* NAVBAR LINKS */}
+        <nav className="z-20 w-full">
+          <SidebarLink href="/" label="Home" icon={Home} />
+        </nav>
       </div>
     </div>
   );
