@@ -25,15 +25,15 @@ const Navbar = () => {
       {/* Icons */}
       <div className='flex items-center gap-4'>
         {isDarkMode ? (
-          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))}>
+          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))} className='rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-100'>
             <Sun className='w-6 h-6 cursor-pointer dark:text-gray-100 text-gray-700'/>
           </button>
         ) : (
-          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))}>
+          <button onClick={() => dispatch(setIsDarkMode(!isDarkMode))} className='rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-300'>
             <Moon className='w-6 h-6 cursor-pointer dark:text-gray-100 text-gray-700'/>
           </button>
         )}
-        <Link href='/settings'>
+        <Link href='/settings' className='rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-200'>
           <Settings className='h-6 w-6 cursor-pointer dark:text-white'/>
         </Link>
         <div className="ml-2 mr-5 hidden min-h-[2em] w-[0.1rem] bg-gray-200 md:inline-block"></div>
