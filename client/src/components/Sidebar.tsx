@@ -2,7 +2,7 @@
 
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
-import { Home, LockIcon, LucideIcon, X } from "lucide-react";
+import { Briefcase, Home, LockIcon, LucideIcon, Search, Settings, User, Users, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -55,6 +55,12 @@ const Sidebar = () => {
         {/* NAVBAR LINKS */}
         <nav className="z-20 w-full">
           <SidebarLink href="/" label="Home" icon={Home} />
+          <SidebarLink href="/timeline" label="Timeline" icon={Briefcase} />
+          <SidebarLink href="/search" label="Search" icon={Search} />
+          <SidebarLink href="/settings" label="Settings" icon={Settings} /> 
+          <SidebarLink href="/users" label="Users" icon={User
+          } />
+          <SidebarLink href="/team" label="Team" icon={Users} />
         </nav>
       </div>
     </div>
