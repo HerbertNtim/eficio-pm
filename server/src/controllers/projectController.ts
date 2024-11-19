@@ -46,6 +46,43 @@ export const createProject = async (req: Request, res: Response): Promise<void> 
   }
 };
 
-export const updateProject = async(req: Response, res: Response): Promise<void> => {
-  
-}
+export const updateProject = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params; // Project ID from the route parameters
+    const { name, description, startDate, endDate } = req.body; // Fields to update
+
+    // Validate if the project ID is provided
+    if (!id) {
+      res.status(400).json({ error: "Project ID is required" });
+      return;
+    }
+
+    // Validate input fields
+    if (!name && !description && !startDate && !endDate) {
+      res.status(400).json({ error: "At least one field must be provided to update" });
+      return;
+    }
+
+    // Update the project in the database
+    const updatedProject = await prisma.project.update({
+
+      where: { id: Number(id) },
+      data: {
+        ...(name && { name }),
+        ...(description && { description }),
+        ...(startDate && { startDate: new Date(startDate) }),
+        ...(endDate && { endDate: new Date(endDate) }),
+      },
+    });
+
+    // Send success response
+res.status(200).json({updateProject});
+  } catch (error: any) {
+    if (error.code === 'P2025') {
+      // Handle specific error when project ID is not found
+      res.status(404).json({ error: "Project not found" });
+    } else {
+      res.status(500).json({ message: `Error updating the project: ${error.message}` });
+    }
+  }
+};
