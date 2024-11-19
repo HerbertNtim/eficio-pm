@@ -5,7 +5,8 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "rhel-openssl-3.0.x"]
 }
 
 datasource db {
@@ -13,49 +14,46 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User  {
-  userId Int @id @default(autoincrement())
-  cognitoId String @unique
-  username String @unique
-  profileImage String?
-  teamId Int?
+model User {
+  userId            Int     @id @default(autoincrement())
+  cognitoId         String  @unique
+  username          String  @unique
+  profilePictureUrl String?
+  teamId            Int?
 
-  authoredTasks Task[] @relation("TaskAuthor")
-  assignedTasks Task[] @relation("TaskAssignee")
+  authoredTasks   Task[]           @relation("TaskAuthor")
+  assignedTasks   Task[]           @relation("TaskAssignee")
   taskAssignments TaskAssignment[]
-  attachments Attachment[]
-  comment Comment[]
-  team Team? @relation(fields: [teamId], references: [id])
+  attachments     Attachment[]
+  comments        Comment[]
+  team            Team?            @relation(fields: [teamId], references: [id])
 }
 
 model Team {
-  id Int @id @default(autoincrement())
-  teamName String
-  productOwnerUserId Int?
+  id                   Int           @id @default(autoincrement())
+  teamName             String
+  productOwnerUserId   Int?
   projectManagerUserId Int?
-
-  projectTeams ProjectTeam[]
-  user User[]
+  projectTeams         ProjectTeam[]
+  user                 User[]
 }
 
 model Project {
-  id Int @id @default(autoincrement())
-  projectName String
-  description String?
-  startDate DateTime?
-  endDate DateTime?
-
-  tasks Task[]
+  id           Int           @id @default(autoincrement())
+  name         String
+  description  String?
+  startDate    DateTime?
+  endDate      DateTime?
+  tasks        Task[]
   projectTeams ProjectTeam[]
 }
 
 model ProjectTeam {
-  id Int @id @default(autoincrement())
-  teamId Int
+  id        Int     @id @default(autoincrement())
+  teamId    Int
   projectId Int
-
-  team Team? @relation(fields: [teamId], references: [id])
-  project Project? @relation(fields: [projectId], references: [id])
+  team      Team    @relation(fields: [teamId], references: [id])
+  project   Project @relation(fields: [projectId], references: [id])
 }
 
 model Task {
