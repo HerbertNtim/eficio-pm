@@ -21,13 +21,25 @@ export const createProject = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { name, description, startDate, endDate } = req.body;
   try {
-    const { name, description, startDate, endDate } = req.body;
-
     // Validate input
     if (!name || !description || !startDate || !endDate) {
       res.status(400).json({ error: "All fields are required" });
       return;
+    }
+
+     // Check if the task with the same title already exists
+     const existingProject = await prisma.project.findFirst({
+      where: {
+        name: name,
+      },
+    });
+
+    if (existingProject) {
+       res.status(400).json({
+        message: "A project with the same name already exists.",
+      });
     }
 
     // Parse dates and create project
@@ -58,9 +70,8 @@ export const updateProject = async (
   res: Response
 ): Promise<void> => {
   const { id } = req.params;
+  const { name, description, startDate, endDate } = req.body;
   try { 
-    const { name, description, startDate, endDate } = req.body; // Fields to update
-
     // Validate if the project ID is provided
     if (!id) {
       res.status(400).json({ error: "Project ID is required" });
