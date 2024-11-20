@@ -4,7 +4,7 @@ import { createProject, deleteProject, getProjects, updateProject } from "../con
 const projectRoutes = Router();
 projectRoutes.get('/', getProjects)
 projectRoutes.post('/', createProject)
-projectRoutes.put('/:id', updateProject)
+projectRoutes.patch('/:id', updateProject)
 projectRoutes.delete("/:id", deleteProject);
 
 export default projectRoutes;
