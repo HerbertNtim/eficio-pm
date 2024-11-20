@@ -98,7 +98,7 @@ export const updateProject = async (
     });
 
     // Send success response
-    res.status(200).json({ updateProject });
+    res.status(200).json({ message: "Project Updated" ,project: updateProject });
   } catch (error: any) {
     if (error.code === "P2025") {
       // Handle specific error when project ID is not found
