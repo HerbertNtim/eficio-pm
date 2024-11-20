@@ -24,9 +24,6 @@ export const createProject = async (
   try {
     const { name, description, startDate, endDate } = req.body;
 
-    // Log request body for debugging
-    console.log("Request body:", req.body);
-
     // Validate input
     if (!name || !description || !startDate || !endDate) {
       res.status(400).json({ error: "All fields are required" });
@@ -60,8 +57,8 @@ export const updateProject = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  try {
-    const { id } = req.params; // Project ID from the route parameters
+  const { id } = req.params;
+  try { 
     const { name, description, startDate, endDate } = req.body; // Fields to update
 
     // Validate if the project ID is provided

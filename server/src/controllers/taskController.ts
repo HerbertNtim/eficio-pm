@@ -41,7 +41,21 @@ export const createTask = async (
     assignedUserId,
   } = req.body;
   try {
-    // Parse dates and create project
+     // Check if the task with the same title already exists
+     const existingTask = await prisma.task.findFirst({
+      where: {
+        title: title,
+        projectId: projectId, 
+      },
+    });
+
+    if (existingTask) {
+      res.status(400).json({
+        message: "A task with the same title already exists in this project.",
+      });
+    }
+
+    // Create the task
     const newTask = await prisma.task.create({
       data: {
         title,
