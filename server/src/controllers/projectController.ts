@@ -21,15 +21,25 @@ export const createProject = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { name, description, startDate, endDate } = req.body;
   try {
-    const { name, description, startDate, endDate } = req.body;
-
-    // Log request body for debugging
-    console.log("Request body:", req.body);
-
     // Validate input
     if (!name || !description || !startDate || !endDate) {
       res.status(400).json({ error: "All fields are required" });
+      return;
+    }
+
+     // Check if the task with the same title already exists
+     const existingProject = await prisma.project.findFirst({
+      where: {
+        name: name,
+      },
+    });
+
+    if (existingProject) {
+       res.status(400).json({
+        message: "A project with the same name already exists.",
+      });
       return;
     }
 
@@ -42,6 +52,17 @@ export const createProject = async (
         endDate: new Date(endDate),
       },
     });
+
+     // Sync the sequence with the current highest ID
+     const maxIdResult = await prisma.$queryRaw<{ maxId: number }[]>`
+     SELECT MAX(id) as maxId FROM project;
+   `;
+
+   const maxId = maxIdResult[0]?.maxId || 0;
+
+   await prisma.$executeRaw`
+     SELECT setval(pg_get_serial_sequence('project', 'id'), ${maxId});
+   `;
 
     // Send success response with a message
     res.status(201).json({
@@ -60,10 +81,9 @@ export const updateProject = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  try {
-    const { id } = req.params; // Project ID from the route parameters
-    const { name, description, startDate, endDate } = req.body; // Fields to update
-
+  const { id } = req.params;
+  const { name, description, startDate, endDate } = req.body;
+  try { 
     // Validate if the project ID is provided
     if (!id) {
       res.status(400).json({ error: "Project ID is required" });
@@ -90,7 +110,7 @@ export const updateProject = async (
     });
 
     // Send success response
-    res.status(200).json({ updateProject });
+    res.status(200).json({ message: "Project Updated" ,project: updateProject });
   } catch (error: any) {
     if (error.code === "P2025") {
       // Handle specific error when project ID is not found
@@ -110,6 +130,18 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
     const deletedProject = await prisma.project.delete({
       where: { id: Number(id) }, // Ensure `id` is the correct field and matches your schema
     });
+
+    // Renumber IDs to fill gaps
+    await prisma.$executeRaw`
+      WITH cte AS (
+        SELECT id, ROW_NUMBER() OVER (ORDER BY id) AS new_id
+        FROM "Project"
+      )
+      UPDATE "Project"
+      SET id = cte.new_id
+      FROM cte
+      WHERE "Project".id = cte.id;
+    `;
 
     res.status(200).json({
       message: "Project deleted successfully",
