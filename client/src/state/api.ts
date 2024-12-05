@@ -63,9 +63,33 @@ export const api = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: process.env.NEXT_PUBLIC_API_BASE_URL,
   }),
+  tagTypes: ["Projects", "Tasks"],
   endpoints: (build) => ({
-    // Define your endpoints here
+    getProjects: build.query<Project[], void>({
+      query: () => "projects",
+      providesTags: ["Projects"],
+    }),
+    createProject: build.mutation<Project, Partial<Project>>({
+      query: (project) => ({
+        url: `projects`,
+        method: "POST",
+        body: project,
+      }),
+      invalidatesTags: ["Projects"],
+    }),
+    getTask: build.query<Task[], { projectId: number }>({
+      query: ({projectId}) => `tasks?projectId=${projectId}`,
+      providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const })) : [{ type: 'Tasks' as const}]
+    }),
+    createTask: build.mutation<Task, Partial<Task>>({
+      query: (task) => ({
+        url: `tasks`,
+        method: "POST",
+        body: task,
+      }),
+      invalidatesTags: ["Tasks"],
+    }),
   }),
 });
 
-export const {} = api
+export const { useCreateProjectMutation, useGetProjectsQuery } = api;
