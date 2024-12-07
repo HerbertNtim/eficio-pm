@@ -24,16 +24,16 @@ export enum Priority {
 }
 
 export interface User {
-  id: number;
+  userId: number;
   username: string;
   email: string;
-  profilePictureURL?: string;
+  profilePictureUrl?: string;
   cognitoId?: string;
   teamId?: number;
 }
 export interface Attachment {
   id: number;
-  filename: string;
+  fileName: string;
   fileURL: string;
   taskId: number;
   uploadedById: number;
@@ -48,6 +48,7 @@ export interface Task {
   tags?: string;
   startDate?: string;
   dueDate?: string;
+  points? : number;
   projectId?: number;
   authorUserId?: number;
   assignedUserId?: number;
@@ -79,7 +80,7 @@ export const api = createApi({
     }),
     getTask: build.query<Task[], { projectId: number }>({
       query: ({projectId}) => `tasks?projectId=${projectId}`,
-      providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const })) : [{ type: 'Tasks' as const}]
+      providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]
     }),
     createTask: build.mutation<Task, Partial<Task>>({
       query: (task) => ({
