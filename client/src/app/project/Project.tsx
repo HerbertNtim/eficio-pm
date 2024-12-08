@@ -5,6 +5,7 @@ import ProjectHeader from "./ProjectHeader";
 import BoardView from "./BoardView";
 import ListView from "./ListView";
 import Timeline from "./Timeline";
+import TableView from "./TableView";
 
 type Props = { id: string };
 
@@ -25,6 +26,9 @@ function Project({ id }: Props) {
       )}
       {activeTab === "Timeline" && (
         <Timeline id={id} setIsModalNewTaskOpen={setIsModalNewTaskOpen} />
+      )}
+      {activeTab === "Table" && (
+        <TableView id={id} setIsModalNewTaskOpen={setIsModalNewTaskOpen} />
       )}
     </div>
   );
