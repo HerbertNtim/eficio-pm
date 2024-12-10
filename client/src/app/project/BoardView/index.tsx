@@ -12,7 +12,7 @@ type BoardProps = {
   setIsModalNewTaskOpen: (isOpen: boolean) => void;
 };
 
-const taskStatus = ["To Do", "Work In Progress", "Under Review", "Completed"];
+const taskStatus = ["To Do", "Work In Progress", "Under Review", "Completed",];
 
 function BoardView({ id, setIsModalNewTaskOpen }: BoardProps) {
   const {
@@ -72,7 +72,7 @@ const TaskColumn = ({
     "To Do": "#2563EB",
     "Work In Progress": "#059669",
     "Under Review": "#D97706",
-    Completed: "#000000",
+    "Completed": "#000000",
   };
 
   return (
