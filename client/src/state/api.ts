@@ -9,7 +9,7 @@ export interface Project {
 }
 
 export enum Status {
-  Todo = "To Do",
+  ToDo = "To Do",
   Completed = "Completed",
   UnderReview = "Under Review",
   Backlog = "Backlog",
@@ -21,6 +21,7 @@ export enum Priority {
   Medium = "Medium",
   High = "High",
   Urgent = "Urgent",
+  Backlog = "Backlog",
 }
 
 export interface User {
