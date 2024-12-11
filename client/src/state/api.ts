@@ -63,7 +63,7 @@ export interface Task {
 export interface SearchResults {
   tasks?: Task[]
   projects?: Project[]
-  user?: User[]
+  users?: User[]
 }
 
 export const api = createApi({

@@ -29,6 +29,8 @@ const Search = () => {
     return handleSearch.cancel;
   }, [handleSearch.cancel]);
 
+  console.log(searchResults);
+
   return (
     <div className="p-8">
       <Header name="Search" />
