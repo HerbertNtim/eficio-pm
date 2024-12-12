@@ -8,6 +8,7 @@ import morgan from 'morgan'
 import projectRoutes from './routes/projectRoute'
 import taskRoutes from './routes/taskRoute'
 import searchRoute from './routes/searchRoutes'
+import usersRouter from './routes/usersRoute'
 
 
 // CONFIGURATION
@@ -29,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/projects', projectRoutes);
 app.use('/tasks', taskRoutes);
 app.use('/search', searchRoute);
+app.use("/users", usersRouter);
 
 // SERVER
 const PORT = process.env.PORT || 5000
