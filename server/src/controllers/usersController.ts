@@ -9,6 +9,6 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
     const users = await prisma.user.findMany()
     res.status(200).json(users);
   } catch (error: any) {
-    res.status(500).json({ message: `Error getting  tasks: ${error.message}` });
+    res.status(500).json({ message: `Error getting users: ${error.message}` });
   }
 };
