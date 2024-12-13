@@ -23,6 +23,27 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
+  const { userId } = req.params;
+  try {
+    const userTasks = await prisma.task.findMany({
+      where: {
+        OR: [
+          {
+            authorUserId: Number(userId),
+          },
+          {
+            assignedUserId: Number(userId),
+          },
+        ]
+      },
+    });
+    res.status(200).json(userTasks);
+  } catch (error: any) {
+    res.status(500).json({ message: `Error getting  tasks: ${error.message}` });
+  }
+};
+
 export const createTask = async (
   req: Request,
   res: Response
