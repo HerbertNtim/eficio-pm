@@ -3,7 +3,24 @@
 import { useAppDispatch, useAppSelector } from "@/app/redux";
 import { setIsSidebarCollapsed } from "@/state";
 import { useGetProjectsQuery } from "@/state/api";
-import { AlertCircle, AlertOctagon, AlertTriangle, Briefcase, ChevronDown, ChevronUp, Home, Layers3, LockIcon, LucideIcon, Search, Settings, ShieldAlert, User, Users, X } from "lucide-react";
+import {
+  AlertCircle,
+  AlertOctagon,
+  AlertTriangle,
+  Briefcase,
+  ChevronDown,
+  ChevronUp,
+  Home,
+  Layers3,
+  LockIcon,
+  LucideIcon,
+  Search,
+  Settings,
+  ShieldAlert,
+  User,
+  Users,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -14,8 +31,10 @@ const Sidebar = () => {
   const [showPriority, setShowPriority] = useState(false);
 
   const dispatch = useAppDispatch();
-  const isSidebarCollapsed = useAppSelector((state) => state.global.isSidebarCollapsed)
-  const {data: projects} = useGetProjectsQuery()
+  const isSidebarCollapsed = useAppSelector(
+    (state) => state.global.isSidebarCollapsed,
+  );
+  const { data: projects } = useGetProjectsQuery();
 
   const sidebarClassNames = `fixed flex flex-col h-[100%] justify-between shadow-xl transition-all duration-300 h-full z-40 dark:bg-black overflow-y-auto bg-white ${isSidebarCollapsed ? "w-0 hidden" : "w-64"}`;
 
@@ -29,8 +48,10 @@ const Sidebar = () => {
           </div>
           {isSidebarCollapsed ? null : (
             <button
-              onClick={() => dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))}
-              className="rounded-full p-2 dark:hover:bg-gray-700 hover:bg-gray-100"
+              onClick={() =>
+                dispatch(setIsSidebarCollapsed(!isSidebarCollapsed))
+              }
+              className="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-700"
             >
               <X className="h-8 w-8 dark:text-white" />
             </button>
@@ -38,12 +59,7 @@ const Sidebar = () => {
         </div>
         {/* TEAM */}
         <div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={40}
-            height={40}
-          />
+          <Image src="/logo.png" alt="Logo" width={40} height={40} />
           <div>
             <h3 className="text-md font-bold tracking-wide dark:text-gray-200">
               EFICIO TEAM
@@ -59,9 +75,8 @@ const Sidebar = () => {
           <SidebarLink href="/" label="Home" icon={Home} />
           <SidebarLink href="/timeline" label="Timeline" icon={Briefcase} />
           <SidebarLink href="/search" label="Search" icon={Search} />
-          <SidebarLink href="/settings" label="Settings" icon={Settings} /> 
-          <SidebarLink href="/users" label="Users" icon={User
-          } />
+          <SidebarLink href="/settings" label="Settings" icon={Settings} />
+          <SidebarLink href="/users" label="Users" icon={User} />
           <SidebarLink href="/teams" label="Team" icon={Users} />
         </nav>
 
@@ -70,7 +85,9 @@ const Sidebar = () => {
           onClick={() => setShowProjects((prev) => !prev)}
           className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
         >
-          <span className="text-lg font-medium text-gray-800 dark:text-gray-100">Projects</span>
+          <span className="text-lg font-medium text-gray-800 dark:text-gray-100">
+            Projects
+          </span>
           {showPriority ? (
             <ChevronUp className="h-5 w-5" />
           ) : (
@@ -78,21 +95,24 @@ const Sidebar = () => {
           )}
         </button>
         {/* PROJECT LISTS */}
-        {showProjects && projects?.map((project) => (
-          <SidebarLink
-            key={project.id}
-            icon={Briefcase}
-            label={project.name}
-            href={`/project/${project.id}`}
-          />
-        ))}
+        {showProjects &&
+          projects?.map((project) => (
+            <SidebarLink
+              key={project.id}
+              icon={Briefcase}
+              label={project.name}
+              href={`/project/${project.id}`}
+            />
+          ))}
 
         {/* PRIORITY LINKS */}
         <button
           onClick={() => setShowPriority((prev) => !prev)}
           className="flex w-full items-center justify-between px-8 py-3 text-gray-500"
         >
-          <span className="text-lg font-medium text-gray-800 dark:text-gray-100">Priority</span>
+          <span className="text-lg font-medium text-gray-800 dark:text-gray-100">
+            Priority
+          </span>
           {showProjects ? (
             <ChevronUp className="h-5 w-5" />
           ) : (
@@ -162,4 +182,3 @@ const SidebarLink = ({ href, icon: Icon, label }: SidebarLinkProps) => {
 };
 
 export default Sidebar;
-
