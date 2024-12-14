@@ -107,6 +107,13 @@ export const api = createApi({
       }),
       invalidatesTags: ["Projects"], 
     }),
+    deleteProject: build.mutation<void, { id: number }>({
+      query: ({ id }) => ({
+        url: `projects/${id}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Projects"],
+    }),
     getTask: build.query<Task[], { projectId: number }>({
       query: ({projectId}) => `tasks?projectId=${projectId}`,
       providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]
