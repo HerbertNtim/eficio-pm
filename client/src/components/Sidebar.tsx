@@ -88,7 +88,7 @@ const Sidebar = () => {
           <span className="text-lg font-medium text-gray-800 dark:text-gray-100">
             Projects
           </span>
-          {showPriority ? (
+          {showProjects ? (
             <ChevronUp className="h-5 w-5" />
           ) : (
             <ChevronDown className="h-5 w-5" />
@@ -113,7 +113,7 @@ const Sidebar = () => {
           <span className="text-lg font-medium text-gray-800 dark:text-gray-100">
             Priority
           </span>
-          {showProjects ? (
+          {showPriority ? (
             <ChevronUp className="h-5 w-5" />
           ) : (
             <ChevronDown className="h-5 w-5" />

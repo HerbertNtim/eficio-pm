@@ -1,20 +1,34 @@
 import Header from "@/components/Header";
-import { Clock, Filter,  Grid3x3,  Grid3X3,  List, Pencil, PlusSquare, Share2, Table } from "lucide-react";
+import {
+  Clock,
+  Filter,
+  Grid3x3,
+  Grid3X3,
+  List,
+  Pencil,
+  PlusSquare,
+  Share2,
+  Table,
+  Trash,
+} from "lucide-react";
 import React, { useState } from "react";
 import ModalNewProject from "./ModalNewProject";
 import ModalEditProject from "@/components/ModalEditProject";
 import { useParams } from "next/navigation";
 import { useGetProjectByIdQuery } from "@/state/api";
+import ModalDeleteProject from "@/components/ModalDeleteProject";
 
 type Props = {
   activeTab: string;
   setActiveTab: (tabName: string) => void;
 };
 
-function ProjectHeader({activeTab, setActiveTab}: Props) {
+function ProjectHeader({ activeTab, setActiveTab }: Props) {
   const { id: projectId } = useParams<{ id: string }>();
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
   const [isModalEditProjectOpen, setIsModalEditProjectOpen] = useState(false);
+  const [isModalDeleteProjectOpen, setIsModalDeleteProjectOpen] =
+    useState(false);
 
   const { data: project } = useGetProjectByIdQuery({ id: Number(projectId) });
 
@@ -33,23 +47,37 @@ function ProjectHeader({activeTab, setActiveTab}: Props) {
         />
       )}
 
+      {project && (
+        <ModalDeleteProject
+          isOpen={isModalDeleteProjectOpen}
+          onClose={() => setIsModalDeleteProjectOpen(false)}
+          project={project}
+        />
+      )}
+
       <div className="pb-6 pt-8">
-        <Header 
-          name="Product Design Management" 
+        <Header
+          name="Product Design Management"
           buttonComponent={
             <div className="flex gap-2">
               <button
-              className="flex items-center rounded-md bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
-              onClick={() => setIsModalNewProjectOpen(true)}
-            >
-              <PlusSquare className="mr-2 h-5 w-5" /> New Boards
-            </button>
-            <button
-              className="flex items-center rounded-md bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
-              onClick={() => setIsModalEditProjectOpen(true)}
-            >
-              <Pencil className="mr-2 h-5 w-5" /> Edit/Update
-            </button>
+                className="flex items-center rounded-md bg-blue-primary px-3 py-2 text-white hover:bg-blue-600"
+                onClick={() => setIsModalNewProjectOpen(true)}
+              >
+                <PlusSquare className="mr-2 h-5 w-5" /> New Boards
+              </button>
+              <button
+                className="flex items-center rounded-md bg-yellow-500 px-3 py-2 text-black hover:bg-yellow-600"
+                onClick={() => setIsModalEditProjectOpen(true)}
+              >
+                <Pencil className="mr-2 h-5 w-5" /> Edit/Update
+              </button>
+              <button
+                className="flex items-center rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600"
+                onClick={() => setIsModalDeleteProjectOpen(true)}
+              >
+                <Trash className="mr-2 h-5 w-5" /> Delete
+              </button>
             </div>
           }
         />
@@ -60,25 +88,25 @@ function ProjectHeader({activeTab, setActiveTab}: Props) {
         <div className="flex flex-1 items-center gap-2 md:gap-4">
           <TabButton
             name="Board"
-            icon={<Grid3X3 className="h-5 w-5"/>}
+            icon={<Grid3X3 className="h-5 w-5" />}
             setActiveTab={setActiveTab}
             activeTab={activeTab}
           />
           <TabButton
             name="List"
-            icon={<List className="h-5 w-5"/>}
+            icon={<List className="h-5 w-5" />}
             setActiveTab={setActiveTab}
             activeTab={activeTab}
           />
           <TabButton
             name="Timeline"
-            icon={<Clock className="h-5 w-5"/>}
+            icon={<Clock className="h-5 w-5" />}
             setActiveTab={setActiveTab}
             activeTab={activeTab}
           />
           <TabButton
             name="Table"
-            icon={<Table className="h-5 w-5"/>}
+            icon={<Table className="h-5 w-5" />}
             setActiveTab={setActiveTab}
             activeTab={activeTab}
           />

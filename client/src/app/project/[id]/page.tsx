@@ -6,6 +6,7 @@ interface Props {
 }
 
 export default async function ProjectPage({ params }: Props) {
-  const { id } = params; 
+  const { id } = await params; 
+
   return <Project id={id} />;
 }
