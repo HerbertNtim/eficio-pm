@@ -118,6 +118,13 @@ export const api = createApi({
       query: ({projectId}) => `tasks?projectId=${projectId}`,
       providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]
     }),
+    getTaskById: build.query<Task, { id: number }>({
+      query: ({ id }) => `tasks/edit/${id}`,
+      providesTags: (result) =>
+        result
+          ? [{ type: 'Tasks' as const, id: result.id }]
+          : [{ type: 'Tasks' as const }],
+    }),   
     getTasksByUser: build.query<Task[], { userId: number }>({
       query: ({userId}) => `tasks/user/${userId}`,
       providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]

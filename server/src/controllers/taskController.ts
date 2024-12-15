@@ -23,6 +23,30 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const getTaskById = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { id } = req.params;
+
+  try {
+    const task = await prisma.task.findUnique({
+      where: { id: parseInt(id) },
+    });
+
+    if (!task) {
+      res.status(404).json({ message: "Project not found" });
+      return;
+    }
+
+    res.status(200).json(task);
+  } catch (error: any) {
+    res.status(500).json({
+      message: `Error fetching project by ID: ${error.message}`,
+    });
+  }
+};
+
 export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
   try {
