@@ -6,13 +6,14 @@ import { Task as TaskType } from "@/state/api";
 import { format } from "date-fns";
 import { EllipsisVertical, MessageSquareMore, Plus } from "lucide-react";
 import Image from "next/image";
+import { useState } from "react";
 
 type BoardProps = {
   id: string;
   setIsModalNewTaskOpen: (isOpen: boolean) => void;
 };
 
-const taskStatus = ["To Do", "Work In Progress", "Under Review", "Completed",];
+const taskStatus = ["To Do", "Work In Progress", "Under Review", "Completed"];
 
 function BoardView({ id, setIsModalNewTaskOpen }: BoardProps) {
   const {
@@ -72,7 +73,7 @@ const TaskColumn = ({
     "To Do": "#2563EB",
     "Work In Progress": "#059669",
     "Under Review": "#D97706",
-    "Completed": "#000000",
+    Completed: "#000000",
   };
 
   return (
@@ -134,6 +135,7 @@ const Task = ({ task }: TaskProp) => {
       isDragging: !!monitor.isDragging(),
     }),
   });
+  const [isManageTaskOpen, setIsManageTaskOpen] = useState(false);
 
   const taskTagsSplit = task.tags ? task.tags.split(",") : [];
 
@@ -145,7 +147,7 @@ const Task = ({ task }: TaskProp) => {
     ? format(new Date(task.dueDate), "P")
     : "";
 
-    const numberOfComments = (task.comments && task.comments.length) || 0;
+  const numberOfComments = (task.comments && task.comments.length) || 0;
 
   const PriorityTags = ({ priority }: { priority: TaskType["priority"] }) => (
     <div
@@ -163,7 +165,7 @@ const Task = ({ task }: TaskProp) => {
       className={`mb-4 rounded-md bg-white shadow dark:bg-dark-secondary ${isDragging ? "opacity-50" : "opacity-100"}`}
     >
       {task.attachments && task.attachments.length > 0 && (
-        <Image 
+        <Image
           src={`/${task.attachments[0].fileURL}`}
           alt={task.attachments[0].fileName || "Attachment"}
           width={400}
@@ -176,18 +178,21 @@ const Task = ({ task }: TaskProp) => {
       <div className="p-4 md:p-6">
         <div className="flex items-start justify-between">
           <div className="flex flex-1 flex-wrap items-center gap-2">
-            {task.priority && <PriorityTags priority={task.priority}/>}
+            {task.priority && <PriorityTags priority={task.priority} />}
             <div className="flex gap-2">
               {taskTagsSplit.map((tag) => (
-                <div key={tag} className="rounded-full bg-blue-100 px-2 py-1 text-xs">
+                <div
+                  key={tag}
+                  className="rounded-full bg-blue-100 px-2 py-1 text-xs"
+                >
                   {" "}
                   {tag}
                 </div>
               ))}
             </div>
           </div>
-          <button className="flex h-6 w-4 flex-shrink-0 items-center justify-center text-gray-700 dark:text-neutral-500">
-            <EllipsisVertical size={26}/>
+          <button className="flex h-6 w-4 flex-shrink-0 items-center justify-center text-gray-700 dark:text-neutral-500" onClick={() => setIsManageTaskOpen(true)}>
+            <EllipsisVertical size={26} />
           </button>
         </div>
 
@@ -197,22 +202,24 @@ const Task = ({ task }: TaskProp) => {
             <div className="text-xs font-semibold dark:text-white">
               {task.points} pts
             </div>
-          )} 
+          )}
         </div>
 
-        <div className="dark:text-neutral-500 text-xs">
+        <div className="text-xs dark:text-neutral-500">
           {formattedStartDate && <span>{formattedStartDate} - </span>}
-          {formattedDueDate && <span>{' '} {formattedDueDate}</span>}
+          {formattedDueDate && <span> {formattedDueDate}</span>}
         </div>
 
-        <p className="dark:text-neutral-400 my-2 text-sm text-gray-600 ">{task.description}</p>
-        <div className="mt-4 border-t border-gray-200 dark:border-stroke-dark"/>
+        <p className="my-2 text-sm text-gray-600 dark:text-neutral-400">
+          {task.description}
+        </p>
+        <div className="mt-4 border-t border-gray-200 dark:border-stroke-dark" />
 
         {/* USERS */}
         <div className="mt-3 flex items-center justify-between">
           <div className="flex -space-x-[6px] overflow-hidden">
             {task.assignee && (
-              <Image 
+              <Image
                 key={task.assignee.userId}
                 src={`/${task.assignee.profilePictureUrl!}`}
                 alt={task.assignee.username}
@@ -222,13 +229,13 @@ const Task = ({ task }: TaskProp) => {
               />
             )}
             {task.author && (
-              <Image 
+              <Image
                 key={task.author?.userId}
                 src={`/${task.author.profilePictureUrl!}`}
                 alt={task.author.username}
                 width={30}
                 height={30}
-                className="rounded-full h-8 w-8 border-white object-cover dark:border-dark-secondary"
+                className="h-8 w-8 rounded-full border-white object-cover dark:border-dark-secondary"
               />
             )}
           </div>
@@ -243,6 +250,9 @@ const Task = ({ task }: TaskProp) => {
       </div>
     </div>
   );
-}
+};
+
+
+
 
 export default BoardView;

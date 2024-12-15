@@ -65,4 +65,6 @@ const TaskCard = ({ task }: Props) => {
   );
 };
 
+// Tasks Modal for delete and edit task.
+
 export default TaskCard;
