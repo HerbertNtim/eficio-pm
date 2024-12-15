@@ -16,6 +16,7 @@ import ModalNewProject from "./ModalNewProject";
 import ModalEditProject from "@/components/ModalEditProject";
 import { useParams } from "next/navigation";
 import { useGetProjectByIdQuery } from "@/state/api";
+import ModalDeleteProject from "@/components/ModalDeleteProject";
 
 type Props = {
   activeTab: string;
@@ -26,7 +27,8 @@ function ProjectHeader({ activeTab, setActiveTab }: Props) {
   const { id: projectId } = useParams<{ id: string }>();
   const [isModalNewProjectOpen, setIsModalNewProjectOpen] = useState(false);
   const [isModalEditProjectOpen, setIsModalEditProjectOpen] = useState(false);
-  const [isModalDeleteProjectOpen, setIsModalDeleteProjectOpen] = useState(false);
+  const [isModalDeleteProjectOpen, setIsModalDeleteProjectOpen] =
+    useState(false);
 
   const { data: project } = useGetProjectByIdQuery({ id: Number(projectId) });
 
@@ -41,6 +43,14 @@ function ProjectHeader({ activeTab, setActiveTab }: Props) {
         <ModalEditProject
           isOpen={isModalEditProjectOpen}
           onClose={() => setIsModalEditProjectOpen(false)}
+          project={project}
+        />
+      )}
+
+      {project && (
+        <ModalDeleteProject
+          isOpen={isModalDeleteProjectOpen}
+          onClose={() => setIsModalDeleteProjectOpen(false)}
           project={project}
         />
       )}
