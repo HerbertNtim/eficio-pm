@@ -67,13 +67,13 @@ function ProjectHeader({ activeTab, setActiveTab }: Props) {
                 <PlusSquare className="mr-2 h-5 w-5" /> New Boards
               </button>
               <button
-                className="flex items-center rounded-md bg-yellow-500 px-3 py-2 text-black hover:bg-blue-600"
+                className="flex items-center rounded-md bg-yellow-500 px-3 py-2 text-black hover:bg-yellow-600"
                 onClick={() => setIsModalEditProjectOpen(true)}
               >
                 <Pencil className="mr-2 h-5 w-5" /> Edit/Update
               </button>
               <button
-                className="flex items-center rounded-md bg-red-500 px-3 py-2 text-white hover:bg-blue-600"
+                className="flex items-center rounded-md bg-red-500 px-3 py-2 text-white hover:bg-red-600"
                 onClick={() => setIsModalDeleteProjectOpen(true)}
               >
                 <Trash className="mr-2 h-5 w-5" /> Delete
