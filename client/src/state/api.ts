@@ -130,6 +130,21 @@ export const api = createApi({
       }),
       invalidatesTags: ["Tasks"],
     }),
+    updateTask: build.mutation<Task, { taskId: number; data: Partial<Task> }>({
+      query: ({ taskId, data }) => ({
+        url: `tasks/${taskId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Tasks"]
+    }),
+    deleteTask: build.mutation<void, { taskId: number }>({
+      query: ({ taskId }) => ({
+        url: `tasks/${taskId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Tasks"]
+    }),
     updateTaskStatus: build.mutation<Task, { taskId: number; status: string }>({
       query: ({ taskId, status }) => ({
         url: `tasks/${taskId}/status`,
@@ -154,4 +169,4 @@ export const api = createApi({
   }),
 });
 
-export const { useCreateProjectMutation, useGetProjectsQuery, useGetProjectByIdQuery, useUpdateProjectMutation, useDeleteProjectMutation, useGetTaskQuery, useCreateTaskMutation, useUpdateTaskStatusMutation, useSearchQuery, useGetUsersQuery, useGetTeamsQuery, useGetTasksByUserQuery } = api;
+export const { useCreateProjectMutation, useGetProjectsQuery, useGetProjectByIdQuery, useUpdateProjectMutation, useDeleteProjectMutation, useGetTaskQuery, useCreateTaskMutation, useUpdateTaskMutation, useDeleteTaskMutation, useUpdateTaskStatusMutation, useSearchQuery, useGetUsersQuery, useGetTeamsQuery, useGetTasksByUserQuery } = api;
