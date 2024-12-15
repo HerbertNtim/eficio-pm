@@ -1,6 +1,7 @@
 import Modal from "@/components/Modal";
 import React from "react";
 import { Project, useDeleteProjectMutation } from "@/state/api";
+import { redirect } from "next/navigation";
 
 type Props = {
   isOpen: boolean;
@@ -14,6 +15,7 @@ const ModalDeleteProject = ({ isOpen, onClose, project }: Props) => {
   const handleDelete = async () => {
     await deleteProject({ id: project.id });
     onClose();
+    redirect("/")
   };
 
   return (
