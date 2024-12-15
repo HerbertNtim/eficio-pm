@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useGetTaskQuery, useUpdateTaskStatusMutation } from "@/state/api";
+import {  useGetTaskQuery, useUpdateTaskStatusMutation } from "@/state/api";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { Task as TaskType } from "@/state/api";
@@ -169,7 +169,7 @@ const Task = ({ task }: TaskProp) => {
         <ModalManageTask
           isOpen={isManageTaskOpen}
           onClose={() => setIsManageTaskOpen(false)}
-          id={task.id}
+          task={task}
         />
       )}
 

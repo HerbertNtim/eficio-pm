@@ -23,30 +23,6 @@ export const getTasks = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export const getTaskById = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
-  const { id } = req.params;
-
-  try {
-    const task = await prisma.task.findUnique({
-      where: { id: parseInt(id) },
-    });
-
-    if (!task) {
-      res.status(404).json({ message: "Project not found" });
-      return;
-    }
-
-    res.status(200).json(task);
-  } catch (error: any) {
-    res.status(500).json({
-      message: `Error fetching project by ID: ${error.message}`,
-    });
-  }
-};
-
 export const getUserTasks = async (req: Request, res: Response): Promise<void> => {
   const { userId } = req.params;
   try {
@@ -147,40 +123,32 @@ export const updateTask = async (
     authorUserId, 
     assignedUserId,
   } = req.body;
-  const taskId = req.params.id;  // Assuming the task ID is passed in the URL
+  const taskId = parseInt(req.params.id); 
 
   try {
-    // Check if the task exists
-    const existingTask = await prisma.task.findUnique({
-      where: { id: Number(taskId) },
+    if (isNaN(taskId) || !projectId) {
+      res.status(400).json({ message: "Invalid task ID or project ID." });
+      return;
+    }
+
+    // Check if the task exists within the specified project
+    const existingTask = await prisma.task.findFirst({
+      where: {
+        id: taskId,
+        projectId: parseInt(projectId), // Ensure projectId is an integer
+      },
     });
 
     if (!existingTask) {
       res.status(404).json({
-        message: "Task not found.",
-      });
-      return;
-    }
-
-    // Check if a task with the same title exists in the same project (optional)
-    const duplicateTask = await prisma.task.findFirst({
-      where: {
-        title: title,
-        projectId: projectId,
-        NOT: { id: Number(taskId) }, // Exclude the current task
-      },
-    });
-
-    if (duplicateTask) {
-      res.status(400).json({
-        message: "A task with the same title already exists in this project.",
+        message: "Task not found in the specified project.",
       });
       return;
     }
 
     // Update the task
     const updatedTask = await prisma.task.update({
-      where: { id: Number(taskId) },
+      where: { id: taskId },
       data: {
         title,
         description,
@@ -190,13 +158,13 @@ export const updateTask = async (
         startDate: new Date(startDate),
         dueDate: new Date(dueDate),
         points,
-        projectId,
+        projectId: parseInt(projectId), 
         authorUserId,
         assignedUserId,
       },
     });
 
-    // Send success response with a message
+    // Send success response with the updated task
     res.status(200).json({
       message: "Task updated successfully",
       task: updatedTask,

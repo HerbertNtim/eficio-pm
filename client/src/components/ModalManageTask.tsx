@@ -65,7 +65,7 @@ const ModalManageTask = ({ isOpen, onClose, task }: Props) => {
 
       onClose();
     } catch (error) {
-      console.error("Error updating task:", error);
+      console.log("Error updating task:", error);
     }
   };
 
@@ -76,7 +76,7 @@ const ModalManageTask = ({ isOpen, onClose, task }: Props) => {
       await deleteTask({ taskId: task.id }).unwrap(); 
       onClose(); 
     } catch (error) {
-      console.error("Error deleting task:", error);
+      console.log("Error deleting task:", error);
     }
   };
 
