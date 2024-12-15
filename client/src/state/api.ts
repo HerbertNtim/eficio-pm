@@ -109,7 +109,7 @@ export const api = createApi({
     }),
     deleteProject: build.mutation<void, { id: number }>({
       query: ({ id }) => ({
-        url: `projects/${id}`,
+        url: `projects/delete/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Projects"],

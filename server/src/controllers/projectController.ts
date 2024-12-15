@@ -25,22 +25,20 @@ export const getProjectById = async (
   const { id } = req.params;
 
   try {
-    // Fetch project by ID from the database
     const project = await prisma.project.findUnique({
-      where: { id: parseInt(id) }, // Assuming `id` is a number. Adjust if it's a string.
+      where: { id: parseInt(id) },
     });
 
-    // Handle case where the project is not found
     if (!project) {
       res.status(404).json({ message: "Project not found" });
+      return;
     }
 
-    // Return the project details
     res.status(200).json(project);
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: `Error fetching project by ID: ${error.message}` });
+    res.status(500).json({
+      message: `Error fetching project by ID: ${error.message}`,
+    });
   }
 };
 
@@ -154,8 +152,21 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
   const { id } = req.params;
 
   try {
+    if (!id) {
+      res.status(400).json({ error: "Project ID is required" });
+      return;
+    }
+
+    // First, delete all related tasks
+    await prisma.task.deleteMany({
+      where: {
+        projectId: Number(id),
+      },
+    });
+
+    // Delete the project
     const deletedProject = await prisma.project.delete({
-      where: { id: Number(id) }, // Ensure `id` is the correct field and matches your schema
+      where: { id: Number(id) },
     });
 
     // Renumber IDs to fill gaps
@@ -170,12 +181,14 @@ export const deleteProject = async (req: Request, res: Response): Promise<void> 
       WHERE "Project".id = cte.id;
     `;
 
+    // Send the success response
     res.status(200).json({
       message: "Project deleted successfully",
       deletedProject,
     });
   } catch (error: any) {
-    res.status(500).json({
+    // Send the error response
+     res.status(500).json({
       message: `Error deleting the project: ${error.message}`,
     });
   }

@@ -31,6 +31,8 @@ const ModalNewProject = ({ isOpen, onClose }: Props) => {
       startDate: formattedStartDate,
       endDate: formattedEndDate,
     });
+
+    onClose();
   };
 
   const isFormValid = () => {

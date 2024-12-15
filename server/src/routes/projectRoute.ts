@@ -6,6 +6,6 @@ projectRoutes.get('/', getProjects)
 projectRoutes.get("/edit/:id", getProjectById);
 projectRoutes.post('/', createProject)
 projectRoutes.patch('/:id', updateProject)
-projectRoutes.delete("/:id", deleteProject);
+projectRoutes.delete("/delete/:id", deleteProject);
 
 export default projectRoutes;
