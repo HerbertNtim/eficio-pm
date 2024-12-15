@@ -74,6 +74,7 @@ export const createTask = async (
       res.status(400).json({
         message: "A task with the same title already exists in this project.",
       });
+      return;
     }
 
     // Create the task
@@ -99,12 +100,125 @@ export const createTask = async (
       task: newTask,
     });
   } catch (error: any) {
-    console.log(error);
     res
       .status(500)
       .json({ message: `Error creating a task: ${error.message}` });
   }
 };
+
+export const updateTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const { 
+    title, 
+    description, 
+    status, 
+    priority, 
+    tags, 
+    startDate, 
+    dueDate, 
+    points, 
+    projectId, 
+    authorUserId, 
+    assignedUserId,
+  } = req.body;
+  const taskId = req.params.id;  // Assuming the task ID is passed in the URL
+
+  try {
+    // Check if the task exists
+    const existingTask = await prisma.task.findUnique({
+      where: { id: Number(taskId) },
+    });
+
+    if (!existingTask) {
+      res.status(404).json({
+        message: "Task not found.",
+      });
+      return;
+    }
+
+    // Check if a task with the same title exists in the same project (optional)
+    const duplicateTask = await prisma.task.findFirst({
+      where: {
+        title: title,
+        projectId: projectId,
+        NOT: { id: Number(taskId) }, // Exclude the current task
+      },
+    });
+
+    if (duplicateTask) {
+      res.status(400).json({
+        message: "A task with the same title already exists in this project.",
+      });
+      return;
+    }
+
+    // Update the task
+    const updatedTask = await prisma.task.update({
+      where: { id: Number(taskId) },
+      data: {
+        title,
+        description,
+        status,
+        priority,
+        tags,
+        startDate: new Date(startDate),
+        dueDate: new Date(dueDate),
+        points,
+        projectId,
+        authorUserId,
+        assignedUserId,
+      },
+    });
+
+    // Send success response with a message
+    res.status(200).json({
+      message: "Task updated successfully",
+      task: updatedTask,
+    });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: `Error updating task: ${error.message}` });
+  }
+};
+
+export const deleteTask = async (
+  req: Request,
+  res: Response
+): Promise<void> => {
+  const taskId = req.params.id;  // Assuming the task ID is passed in the URL
+
+  try {
+    // Check if the task exists
+    const existingTask = await prisma.task.findUnique({
+      where: { id: Number(taskId) },
+    });
+
+    if (!existingTask) {
+      res.status(404).json({
+        message: "Task not found.",
+      });
+      return;
+    }
+
+    // Delete the task
+    await prisma.task.delete({
+      where: { id: Number(taskId) },
+    });
+
+    // Send success response with a message
+    res.status(200).json({
+      message: "Task deleted successfully",
+    });
+  } catch (error: any) {
+    res
+      .status(500)
+      .json({ message: `Error deleting task: ${error.message}` });
+  }
+};
+
 
 export const updateTaskStatus = async (
   req: Request,
