@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { EllipsisVertical, MessageSquareMore, Plus } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
+import ModalManageTask from "@/components/ModalManageTask";
 
 type BoardProps = {
   id: string;
@@ -164,6 +165,14 @@ const Task = ({ task }: TaskProp) => {
       }}
       className={`mb-4 rounded-md bg-white shadow dark:bg-dark-secondary ${isDragging ? "opacity-50" : "opacity-100"}`}
     >
+      {task && (
+        <ModalManageTask
+          isOpen={isManageTaskOpen}
+          onClose={() => setIsManageTaskOpen(false)}
+          id={task.id}
+        />
+      )}
+
       {task.attachments && task.attachments.length > 0 && (
         <Image
           src={`/${task.attachments[0].fileURL}`}

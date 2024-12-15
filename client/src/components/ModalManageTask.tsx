@@ -1,15 +1,15 @@
 import Modal from "@/components/Modal";
-import { Priority, Status, useUpdateTaskMutation, useDeleteTaskMutation } from "@/state/api";
-import React, { useState, useEffect } from "react";
+import { Priority, Status, useUpdateTaskMutation, useDeleteTaskMutation, Task } from "@/state/api";
+import React, { useEffect, useState } from "react";
 import { formatISO } from "date-fns";
 
 type Props = {
   isOpen: boolean;
   onClose: () => void;
-  id?: string | null;
+  task: Task
 };
 
-const ModalManageTask = ({ isOpen, onClose, id = null }: Props) => {
+const ModalManageTask = ({ isOpen, onClose, task }: Props) => {
   const [updateTask, { isLoading: isUpdating }] = useUpdateTaskMutation();
   const [deleteTask, { isLoading: isDeleting }] = useDeleteTaskMutation();
   const [title, setTitle] = useState("");
@@ -23,14 +23,22 @@ const ModalManageTask = ({ isOpen, onClose, id = null }: Props) => {
   const [assignedUserId, setAssignedUserId] = useState("");
   const [projectId, setProjectId] = useState("");
 
-  // If id is passed, fetch the task details to edit
+
   useEffect(() => {
-    if (id) {
-      // Call an API to fetch the task details and set the state (example)
-      // Replace this with an actual API call to get the task data by ID
-      // setTaskDetails(task);
+    if (task) {
+      setTitle(task.title || "");
+      setDescription(task.description || "");
+      setStatus(task.status || Status.ToDo);
+      setPriority(task.priority || Priority.Backlog);
+      setTags(task.tags || "");
+      setStartDate(task.startDate || "");
+      setDueDate(task.dueDate || "");
+      setAuthorUserId(task.authorUserId?.toString() || "");
+      setAssignedUserId(task.assignedUserId?.toString() || "");
+      setProjectId(task.projectId?.toString() || "");
     }
-  }, [id]);
+  }, [task]);
+
 
   const handleUpdate = async () => {
     if (!title || !authorUserId) return;
@@ -40,17 +48,19 @@ const ModalManageTask = ({ isOpen, onClose, id = null }: Props) => {
 
     try {
       await updateTask({
-        id, // The task ID to update
-        title,
-        description,
-        status,
-        priority,
-        tags,
-        startDate: formattedStartDate,
-        dueDate: formattedDueDate,
-        authorUserId: parseInt(authorUserId),
-        assignedUserId: parseInt(assignedUserId),
-        projectId: projectId ? parseInt(projectId) : undefined,
+        taskId: task.id,
+        data: {
+          title,
+          description,
+          status,
+          priority,
+          tags,
+          startDate: formattedStartDate,
+          dueDate: formattedDueDate,
+          authorUserId: parseInt(authorUserId),
+          assignedUserId: parseInt(assignedUserId),
+          projectId: projectId ? parseInt(projectId) : undefined,
+        }
       }).unwrap();
 
       onClose();
@@ -60,11 +70,11 @@ const ModalManageTask = ({ isOpen, onClose, id = null }: Props) => {
   };
 
   const handleDelete = async () => {
-    if (!id) return;
+    if (!task.id) return;
     
     try {
-      await deleteTask(id).unwrap(); // Assuming id is the task ID to delete
-      onClose(); // Close modal after deletion
+      await deleteTask({ taskId: task.id }).unwrap(); 
+      onClose(); 
     } catch (error) {
       console.error("Error deleting task:", error);
     }
