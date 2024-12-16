@@ -123,18 +123,18 @@ export const updateTask = async (
     authorUserId, 
     assignedUserId,
   } = req.body;
-  const taskId = parseInt(req.params.id); 
-
+  const { taskId } = req.params
+  
   try {
-    if (isNaN(taskId) || !projectId) {
-      res.status(400).json({ message: "Invalid task ID or project ID." });
+    if (!parseInt(taskId)) {
+      res.status(400).json({ message: "Invalid task ID"});
       return;
     }
 
     // Check if the task exists within the specified project
     const existingTask = await prisma.task.findFirst({
       where: {
-        id: taskId,
+        id: parseInt(taskId),
         projectId: parseInt(projectId), // Ensure projectId is an integer
       },
     });
@@ -148,7 +148,7 @@ export const updateTask = async (
 
     // Update the task
     const updatedTask = await prisma.task.update({
-      where: { id: taskId },
+      where: { id: parseInt(taskId) },
       data: {
         title,
         description,

@@ -32,7 +32,7 @@ function BoardView({ id, setIsModalNewTaskOpen }: BoardProps) {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-1 gap-4 p-4 md:grid-cols-2 xl:grid-cols-4 overflow-x-auto">
         {taskStatus.map((status) => (
           <TaskColumn
             key={status}
@@ -74,7 +74,7 @@ const TaskColumn = ({
     "To Do": "#2563EB",
     "Work In Progress": "#059669",
     "Under Review": "#D97706",
-    Completed: "#000000",
+    "Completed": "#000000",
   };
 
   return (
@@ -82,7 +82,7 @@ const TaskColumn = ({
       ref={(instance) => {
         drop(instance);
       }}
-      className={`sl:py-4 rounded-lg py-2 xl:px-2 ${isOver ? "bg-blue-100 dark:bg-neutral-950" : ""}`}
+      className={`sl:py-4 rounded-lg py-2 xl:px-2 overflow-x-auto ${isOver ? "bg-blue-100 dark:bg-neutral-950" : ""}`}
     >
       <div className="mb-3 flex w-full">
         <div
