@@ -117,7 +117,7 @@ export const api = createApi({
     getTask: build.query<Task[], { projectId: number }>({
       query: ({projectId}) => `tasks?projectId=${projectId}`,
       providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]
-    }),
+    }),  
     getTasksByUser: build.query<Task[], { userId: number }>({
       query: ({userId}) => `tasks/user/${userId}`,
       providesTags: (result) => result ? result.map(({ id }) => ({ type: 'Tasks' as const, id })) : [{ type: 'Tasks' as const}]
@@ -129,6 +129,21 @@ export const api = createApi({
         body: task,
       }),
       invalidatesTags: ["Tasks"],
+    }),
+    updateTask: build.mutation<Task, { taskId: number; data: Partial<Task> }>({
+      query: ({ taskId, data }) => ({
+        url: `tasks/${taskId}`,
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Tasks"]
+    }),
+    deleteTask: build.mutation<void, { taskId: number }>({
+      query: ({ taskId }) => ({
+        url: `tasks/${taskId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["Tasks"]
     }),
     updateTaskStatus: build.mutation<Task, { taskId: number; status: string }>({
       query: ({ taskId, status }) => ({
@@ -154,4 +169,4 @@ export const api = createApi({
   }),
 });
 
-export const { useCreateProjectMutation, useGetProjectsQuery, useGetProjectByIdQuery, useUpdateProjectMutation, useDeleteProjectMutation, useGetTaskQuery, useCreateTaskMutation, useUpdateTaskStatusMutation, useSearchQuery, useGetUsersQuery, useGetTeamsQuery, useGetTasksByUserQuery } = api;
+export const { useCreateProjectMutation, useGetProjectsQuery, useGetProjectByIdQuery, useUpdateProjectMutation, useDeleteProjectMutation, useGetTaskQuery, useCreateTaskMutation, useUpdateTaskMutation, useDeleteTaskMutation, useUpdateTaskStatusMutation, useSearchQuery, useGetUsersQuery, useGetTeamsQuery, useGetTasksByUserQuery } = api;

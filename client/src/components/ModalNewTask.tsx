@@ -44,7 +44,7 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
         authorUserId: parseInt(authorUserId),
         assignedUserId: parseInt(assignedUserId),
         projectId: id !== null ? Number(id) : Number(projectId),
-      }).unwrap();
+      })
 
       // Clear form values
       setTitle("");
@@ -61,7 +61,7 @@ const ModalNewTask = ({ isOpen, onClose, id = null }: Props) => {
       // Close the modal
       onClose();
     } catch (error) {
-      console.error("Error creating task:", error);
+      console.log("Error creating task:", error);
     }
   };
 
