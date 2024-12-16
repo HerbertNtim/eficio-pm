@@ -180,7 +180,7 @@ export const deleteTask = async (
   req: Request,
   res: Response
 ): Promise<void> => {
-  const taskId = req.params.id;  // Assuming the task ID is passed in the URL
+  const { taskId } = req.params;  // Assuming the task ID is passed in the URL
 
   try {
     // Check if the task exists
