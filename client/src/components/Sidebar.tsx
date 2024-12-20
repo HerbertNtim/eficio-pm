@@ -59,7 +59,7 @@ const Sidebar = () => {
         </div>
         {/* TEAM */}
         <div className="flex items-center gap-5 border-y-[1.5px] border-gray-200 px-8 py-4 dark:border-gray-700">
-          <Image src="/logo.png" alt="Logo" width={40} height={40} />
+          <Image src={`https://eficio-pm-s3-images.s3.us-east-1.amazonaws.com/logo.png`} alt="Logo" width={40} height={40} />
           <div>
             <h3 className="text-md font-bold tracking-wide dark:text-gray-200">
               EFICIO TEAM
