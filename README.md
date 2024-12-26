@@ -1,6 +1,6 @@
 # Project Management Application
 
-![Frontend Screenshot](#) <!-- Add the screenshot here -->
+![Frontend Screenshot](https://github.com/HerbertNtim/eficio-pm/blob/main/client/public/screen.jpg) <!-- Add the screenshot here -->
 
 ## 🚀 Project Overview
 This full-stack project management application streamlines team workflows with features like drag-and-drop task status updates and CRUD operations for projects and tasks. Deployed using AWS services, it ensures high scalability and performance.
@@ -92,7 +92,7 @@ This full-stack project management application streamlines team workflows with f
 ---
 
 ## 🖼️ Screenshot
-![Frontend Screenshot](#) <!-- Add the path to your screenshot -->
+![Frontend Screenshot](https://github.com/HerbertNtim/eficio-pm/blob/main/client/public/screen.jpg) <!-- Add the path to your screenshot -->
 
 ---
 
