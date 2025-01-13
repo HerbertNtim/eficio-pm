@@ -1,4 +1,5 @@
 # Project Management Application
+**Watch Video** ![Watch the Live Video DEMO](https://youtu.be/k0zDHkpDctY) <!-- Add the screenshot here -->
 
 ![Frontend Screenshot](https://github.com/HerbertNtim/eficio-pm/blob/main/client/public/screen.jpg) <!-- Add the screenshot here -->
 
